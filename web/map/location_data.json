@@ -1,0 +1,199 @@
+{
+  "Locations": [
+    {
+      "population": 1,
+      "name": "Yorkshire",
+      "mapcolour": [ 100, 200, 255 ]
+    },
+    {
+      "population": 1,
+      "name": "Lancashire",
+      "mapcolour": [ 100, 200, 64 ]
+    },
+		{
+      "population": 1,
+      "name": "Durham",
+      "mapcolour": [ 50, 101, 241 ]
+    },
+		{
+      "population": 1,
+      "name": "Westmorland",
+      "mapcolour": [ 57, 11, 11 ]
+    },
+		{
+      "population": 1,
+      "name": "Northumberland",
+      "mapcolour": [ 66, 191, 39 ]
+    },
+		{
+      "population": 1,
+      "name": "Cumberland",
+      "mapcolour": [ 90, 24, 11 ]
+    },
+		{
+      "population": 1,
+      "name": "Lincolnshire",
+      "mapcolour": [ 48, 148, 149 ]
+    },
+		{
+      "population": 1,
+      "name": "Nottinghamshire",
+      "mapcolour": [ 100, 13, 99 ]
+    },
+		{
+      "population": 1,
+      "name": "Derbyshire",
+      "mapcolour": [ 9, 129, 188 ]
+    },
+		{
+      "population": 1,
+      "name": "Staffordshire",
+      "mapcolour": [ 88, 211, 90 ]
+    },
+		{
+      "population": 1,
+      "name": "Cheshire",
+      "mapcolour": [ 70, 80, 190 ]
+    },
+		{
+      "population": 1,
+      "name": "Shropshire",
+      "mapcolour": [ 40, 20, 209 ]
+    },
+		{
+      "population": 1,
+      "name": "Leicestershire",
+      "mapcolour": [ 240, 66, 109 ]
+    },
+		{
+      "population": 1,
+      "name": "Northamptonshire",
+      "mapcolour": [ 111, 211, 209 ]
+    },
+		{
+      "population": 1,
+      "name": "Warwickshire",
+      "mapcolour": [ 167, 56, 88 ]
+    },
+		{
+      "population": 1,
+      "name": "Woucestershire",
+      "mapcolour": [ 18, 24, 99 ]
+    },
+		{
+      "population": 1,
+      "name": "Herefordshire",
+      "mapcolour": [ 108, 201, 9 ]
+    },
+		{
+      "population": 1,
+      "name": "Gloucestershire",
+      "mapcolour": [ 16, 116, 216 ]
+    },
+		{
+      "population": 1,
+      "name": "Wiltshire",
+      "mapcolour": [ 14, 90, 70 ]
+    },
+		{
+      "population": 1,
+      "name": "Dorset",
+      "mapcolour": [ 188, 126, 116 ]
+    },
+		{
+      "population": 1,
+      "name": "Somerset",
+      "mapcolour": [ 166, 40, 40 ]
+    },
+		{
+      "population": 1,
+      "name": "Devon",
+      "mapcolour": [ 100, 200, 0 ]
+    },
+		{
+      "population": 1,
+      "name": "Cornwall",
+      "mapcolour": [ 170, 190, 30 ]
+    },
+		{
+      "population": 1,
+      "name": "Hampshire",
+      "mapcolour": [ 190, 10, 16 ]
+    },
+		{
+      "population": 1,
+      "name": "Sussex",
+      "mapcolour": [ 88, 91, 214 ]
+    },
+		{
+      "population": 1,
+      "name": "Isle of Wight",
+      "mapcolour": [ 67, 167, 130 ]
+    },
+		{
+      "population": 1,
+      "name": "Kent",
+      "mapcolour": [ 45, 182, 70 ]
+    },
+		{
+      "population": 1,
+      "name": "Surrey",
+      "mapcolour": [ 90, 71, 71 ]
+    },
+		{
+      "population": 1,
+      "name": "Middlesex",
+      "mapcolour": [ 177, 179, 13 ]
+    },
+		{
+      "population": 1,
+      "name": "Berkshire",
+      "mapcolour": [ 12, 12, 255 ]
+    },
+		{
+      "population": 1,
+      "name": "Oxfordshire",
+      "mapcolour": [ 91, 13, 90 ]
+    },
+		{
+      "population": 1,
+      "name": "Buckinghamshire",
+      "mapcolour": [ 106, 166, 98 ]
+    },
+		{
+      "population": 1,
+      "name": "Huntingdonshire",
+      "mapcolour": [ 244, 88, 197 ]
+    },
+		{
+      "population": 1,
+      "name": "Bedfordshire",
+      "mapcolour": [ 82, 125, 225 ]
+    },
+		{
+      "population": 1,
+      "name": "Hertfordshire",
+      "mapcolour": [ 90, 146, 168 ]
+    },
+		{
+      "population": 1,
+      "name": "Essex",
+      "mapcolour": [ 200, 199, 68 ]
+    },
+		{
+      "population": 1,
+      "name": "Suffolk",
+      "mapcolour": [ 185, 46, 200 ]
+    },
+		{
+      "population": 1,
+      "name": "Norfolk",
+      "mapcolour": [ 111, 66, 55 ]
+    },
+		{
+      "population": 1,
+      "name": "Cambridgeshire",
+      "mapcolour": [ 51, 51, 41 ]
+    }
+  ]
+}
