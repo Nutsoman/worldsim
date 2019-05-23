@@ -194,6 +194,81 @@
       "population": 1,
       "name": "Cambridgeshire",
       "mapcolour": [ 51, 51, 41 ]
+    },
+		{
+      "population": 1,
+      "name": "Monmouthshire",
+      "mapcolour": [ 65, 132, 55 ]
+    },
+		{
+      "population": 1,
+      "name": "Brecknockshire",
+      "mapcolour": [ 211, 99, 49 ]
+    },
+		{
+      "population": 1,
+      "name": "Glamorgan",
+      "mapcolour": [ 88, 188, 46 ]
+    },
+		{
+      "population": 1,
+      "name": "Carmarthenshire",
+      "mapcolour": [ 56, 36, 106 ]
+    },
+		{
+      "population": 1,
+      "name": "Pembrokeshire",
+      "mapcolour": [ 70, 188, 46 ]
+    },
+		{
+      "population": 1,
+      "name": "Cardiganshire",
+      "mapcolour": [ 116, 177, 54 ]
+    },
+		{
+      "population": 1,
+      "name": "Radnorshire",
+      "mapcolour": [ 126, 17, 17 ]
+    },
+		{
+      "population": 1,
+      "name": "Montgomeryshire",
+      "mapcolour": [ 50, 150, 154 ]
+    },
+		{
+      "population": 1,
+      "name": "Merioneth",
+      "mapcolour": [ 68, 146, 14 ]
+    },
+		{
+      "population": 1,
+      "name": "Caernarfonshire",
+      "mapcolour": [ 130, 224, 230 ]
+    },
+		{
+      "population": 1,
+      "name": "Anglesey",
+      "mapcolour": [ 251, 50, 157 ]
+    },
+		{
+      "population": 1,
+      "name": "Denbighshire",
+      "mapcolour": [ 119, 97, 187 ]
+    },
+		{
+      "population": 1,
+      "name": "Flintshire",
+      "mapcolour": [ 66, 254, 41 ]
+    },
+		{
+      "population": 1,
+      "name": "East Riding",
+      "mapcolour": [ 178, 214, 41 ]
+    },
+		{
+      "population": 1,
+      "name": "West Riding",
+      "mapcolour": [ 87, 24, 61 ]
     }
   ]
 }

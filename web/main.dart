@@ -1,8 +1,14 @@
-import 'dart:html';
 import 'dart:async';
+import 'dart:html';
+import 'gamestate.dart';
 import 'map/world.dart';
 
+
+World world;
+
 Future<void> main() async {
-  World world = new World();
-  await world.loadData("map/location_data.json","map/map.png");
+  Gamestate game = new Gamestate();
+  await game.initGamestate();
+  game.gameLoop(0);
 }
+

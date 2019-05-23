@@ -1,0 +1,159 @@
+{
+  "Nations": [
+    {
+      "name": "Yorkshire",
+      "mapcolour": [
+        100,
+        200,
+        255
+      ],
+      "territory": [
+        "Yorkshire",
+        "East Riding",
+        "West Riding"
+      ]
+    },
+    {
+      "name": "Lancashire",
+      "mapcolour": [
+        54,
+        170,
+        44
+      ],
+      "territory": [
+        "Lancashire",
+        "Cheshire",
+        "Westmorland"
+      ]
+    },
+    {
+      "name": "Welsh People",
+      "mapcolour": [
+        154,
+        170,
+        200
+      ],
+      "territory": [
+        "Carmarthenshire",
+        "Glamorgan",
+        "Cardiganshire"
+      ]
+    },
+    {
+      "name": "People's Republic of Wealth",
+      "mapcolour": [
+        154,
+        170,
+        200
+      ],
+      "territory": [
+        "Middlesex",
+        "Surrey",
+        "Buckinghamshire",
+        "Berkshire"
+      ]
+    },
+    {
+      "name": "Greater Icenia",
+      "mapcolour": [
+        16,
+        29,
+        30
+      ],
+      "territory": [
+        "Essex",
+        "Suffolk",
+        "Norfolk"
+      ]
+    },
+    {
+      "name": "The Wild West",
+      "mapcolour": [
+        116,
+        129,
+        130
+      ],
+      "territory": [
+        "Cornwall",
+        "Devon",
+        "Somerset",
+        "Dorset"
+      ]
+    },
+    {
+      "name": "No Man's Land",
+      "mapcolour": [
+        6,
+        229,
+        30
+      ],
+      "territory": [
+        "Oxfordshire",
+        "Warwickshire",
+        "Gloucestershire"
+      ]
+    },
+    {
+      "name": "The Grand Barony of Carnage",
+      "mapcolour": [
+        66,
+        29,
+        230
+      ],
+      "territory": [
+        "Huntingdonshire"
+      ]
+    },
+    {
+      "name": "Foreigners, Inc",
+      "mapcolour": [
+        8,
+        229,
+        200
+      ],
+      "territory": [
+        "Northumberland",
+        "Cumberland",
+        "Durham"
+      ]
+    },
+    {
+      "name": "The Resilient French",
+      "mapcolour": [
+        188,
+        65,
+        20
+      ],
+      "territory": [
+        "Kent",
+        "Sussex",
+        "Isle of Wight"
+      ]
+    },
+    {
+      "name": "Last Bastion of Civilization",
+      "mapcolour": [
+        188,
+        245,
+        80
+      ],
+      "territory": [
+        "Denbighshire",
+        "Merioneth",
+        "Caernarfonshire"
+      ]
+    },
+    {
+      "name": "Hell",
+      "mapcolour": [
+        50,
+        1,
+        1
+      ],
+      "territory": [
+        "Lincolnshire",
+        "Leicestershire"
+      ]
+    }
+  ]
+}

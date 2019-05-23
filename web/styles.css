@@ -8,6 +8,48 @@ html, body {
   font-family: 'Roboto', sans-serif;
 }
 
+#container {
+    position: relative;
+}
+
+#UI{
+    bottom: 0;
+    right: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#rightbar {
+    width: 200px;
+    height: 100%;
+    background-color: black;
+    position: absolute;
+    color: white;
+    right: 0;
+    padding: 30px;
+}
+
+#province_view {
+    width: 400px;
+    height: 300px;
+    background-color: black;
+    position: absolute;
+    color: white;
+    bottom: 0;
+    box-sizing: border-box;
+    padding: 30px;
+}
+
 #output {
   padding: 20px;
   text-align: center;
