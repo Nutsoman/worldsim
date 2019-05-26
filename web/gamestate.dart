@@ -1,9 +1,12 @@
 import 'dart:html';
-import 'dart:html' as prefix0;
+import 'map/buildings.dart';
 import 'map/world.dart';
 import 'map/location.dart';
 import 'package:CommonLib/Random.dart';
+import 'modifier.dart';
 import 'ui.dart';
+import 'nations/nation.dart';
+import 'dart:math' as Math;
 
 class Gamestate {
 
@@ -21,35 +24,46 @@ class Gamestate {
   double frametime = 0.0;
   double framestep = 0.25;
 
+  Point<num> mousepos;
+  Point<num> startposition;
+
   _Uiholder ui;
 
   //State of the Game
 
   Gamestate(){
     calendar = new Calendar(this,2455,4,17);
-    world = new World();
+    world = new World(this);
   }
 
   Future<void> initGamestate() async{
     await this.world.loadData("map/location_data.json","nations/nations.json","map/map.png");
+    await Modifiers.init();
+    await Buildings.init();
     querySelector("#map").append(world.mapimage);
-    ui = new _Uiholder();
-    ui.element = querySelector("#UI");
-    ui.element.onClick.listen(click);
-    querySelector("#container").style..width = "${world.mapimage.width}px"..height = "${world.mapimage.height}px";
-
-    ui.provinceview = new Provinceview(querySelector("#province_view"),this);
-    ui.rightbar = new Rightbar(querySelector("#rightbar"),this);
+    ui = new _Uiholder(this);
+    for ( Location location in world.locations ){
+      location.updateValues();
+    }
   }
 
   void click(MouseEvent event) {
-    int x = event.offset.x+window.scrollX;
-    int y = event.offset.y+window.scrollY;
-    int index = world.mapimage.width*y+x;
-    int id = world.locationlookup[index];
-    if( id != World.nolocation ){
-      Location location = world.locations[id];
-      ui.provinceview.open(location);
+    if ( event.button == 0 ){
+      int x = event.offset.x + window.scrollX;
+      int y = event.offset.y + window.scrollY;
+      int index = world.mapimage.width * y + x;
+      int id = world.locationlookup[index];
+      if (id != World.nolocation) {
+        Location location = world.locations[id];
+        ui.provinceview.open(location);
+        ui.topbar.nation = location.owner;
+        ui.topbar.update();
+      }
+      else {
+        ui.provinceview.hide();
+        ui.topbar.nation = null;
+        ui.topbar.update();
+      }
     }
   }
 
@@ -78,6 +92,12 @@ class Gamestate {
   void logicUpdate(num dt) {
     //things
     calendar.updateCalendar();
+    for( Location location in world.locations ){
+      location.logicUpdate();
+    }
+    for( Nation nation in world.nations ){
+      nation.logicUpdate();
+    }
     for( UI ui in this.ui.uis ){
       if( ui.visible ){
         ui.update();
@@ -88,19 +108,19 @@ class Gamestate {
 
   void dailyUpdate() {
     for( Location location in world.locations ){
-      if( location.population > 0 && random.nextInt(100) < 100 ) {
-        location.population++;
-      }
-      location.updateValues();
+      location.dailyUpdate();
+    }
+    for( Nation nation in world.nations ){
+      nation.dailyUpdate();
     }
   }
 
   void monthlyUpdate() {
     for( Location location in world.locations ){
-      if( location.population > 0 && random.nextInt(100) < 100 ) {
-        location.population++;
-      }
-      location.updateValues();
+      location.monthlyUpdate(random);
+    }
+    for( Nation nation in world.nations ){
+      nation.monthlyUpdate(random);
     }
   }
 
@@ -133,12 +153,14 @@ class Calendar {
   int month;
   int day;
   int tick = 0;
+  int tickselapsed = 0;
   Gamestate game;
 
   Calendar(Gamestate this.game, int this.year, int this.month, int this.day);
 
   void updateCalendar(){
     tick++;
+    tickselapsed++;
     if( tick >= 4 ){
       tick = 0;
       day++;
@@ -156,6 +178,10 @@ class Calendar {
     print(this);
   }
 
+  static int duration({int ticks:0, int days:0, int months:0, int years:0}){
+    return ticks + 4*(days+30*(months+12*years));
+  }
+
   @override
   String toString(){
     return "${tick+1} ${day+1}.${month+1}.$year";
@@ -167,14 +193,48 @@ class _Uiholder{
   Element element;
   Provinceview provinceview;
   Rightbar rightbar;
+  Topbar topbar;
+  CanvasElement drawlayer;
+  Gamestate game;
 
+  _Uiholder(Gamestate this.game){
+    this.element = querySelector("#UI");
+    this.element.onClick.listen(game.click);
+    this.drawlayer = querySelector("#mousedraw");
+    document.onResize.listen(resize);
+    document.onScroll.listen(resize);
+    querySelector("#container").style..width = "${game.world.mapimage.width}px"..height = "${game.world.mapimage.height}px";
 
+    this.provinceview = new Provinceview(querySelector("#province_view"),game);
+    this.rightbar = new Rightbar(querySelector("#rightbar"),game);
+    this.topbar = new Topbar(querySelector("#topbar"),game);
+
+  }
+
+  void resize(Event event){
+    drawlayer.width = window.innerWidth;
+    drawlayer.height = window.innerHeight;
+    draw();
+  }
+
+  void draw(){
+
+  }
+
+  void clear(){
+    drawlayer.context2D.clearRect(0, 0, drawlayer.width, drawlayer.height);
+  }
+
+  void update(){
+    clear();
+
+  }
 
 
 
   List<UI> _uis;
   List<UI> get uis {
-    _uis ??= <UI>[provinceview,rightbar];
+    _uis ??= <UI>[provinceview,rightbar,topbar];
     return _uis;
   }
 

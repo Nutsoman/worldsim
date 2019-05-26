@@ -14,15 +14,49 @@
 
 <body>
     <div id="container">
-        <div id="map"></div>
+        <div id="map">
+
+        </div>
 
     </div>
     <div id="UI">
-        <div id="province_view">
+        <canvas id="mousedraw"></canvas>
+        <div class="ui" id="province_view">
+            <div id="tabrow">
+                <div id="infotabbutton" class="tabbutton">Information</div>
+                <div id="neighbourtabbutton" class = "tabbutton">Neighbours</div>
+            </div>
+            <div id = "infotab">
+                <div id="buildingtext">
+                </div>
+                <div id="buildinggrid">
+                </div>
+                <div id="progressbar" class="progressbar">
+                    <div>
+                    </div>
+                </div>
+            </div>
+            <div id="neighbourtab">
+                <div id="neighbourlist">
+                    <div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui" id="rightbar">
 
         </div>
-        <div id="rightbar">
-
+        <div class="ui" id="topbar">
+            <div class="Topbarelement" id="nationflag">
+            </div>
+            <div class="Topbarelement" id="nationinfo">
+            </div>
+            <div class="Topbarelement" id="spacer">
+            </div>
+            <div class="Topbarelement" id="datetime">
+            </div>
+        </div>
+        <div class="ui" id="nationname">
         </div>
     </div>
 </body>

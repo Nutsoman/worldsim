@@ -2,6 +2,7 @@ import 'dart:html' as prefix0;
 import 'dart:math';
 import 'package:CommonLib/Random.dart' as Common;
 
+import '../gamestate.dart';
 import "location.dart";
 import 'dart:async';
 import 'package:LoaderLib/Loader.dart';
@@ -24,7 +25,9 @@ class World {
   CanvasElement maptexture;
   CanvasElement mapimage;
 
-  World();
+  final Gamestate game;
+
+  World(Gamestate this.game);
 
   Future<void> loadData(String data, String nationdata, String image) async {
     //Load Location Data
@@ -44,7 +47,7 @@ class World {
     JsonHandler jsonnation = new JsonHandler(nation_data);
     List<Map<String,dynamic>> nations = jsonnation.getArray("Nations");
     for( Map<String,dynamic> nation in nations ){
-      Nation nat = new Nation(nation["name"],new Colour(nation["mapcolour"][0],nation["mapcolour"][1],nation["mapcolour"][2]));
+      Nation nat = new Nation(nation["name"],new Colour(nation["mapcolour"][0],nation["mapcolour"][1],nation["mapcolour"][2]),this);
       this.nations.add(nat);
       List<dynamic> locationids = nation["territory"];
       for ( String lid in locationids ){
@@ -57,7 +60,7 @@ class World {
       if ( location.owner == null ){
         Common.Random rando = new Common.Random(location.id);
         Colour colour = new Colour.hsv(rando.nextDouble(), rando.nextDouble(0.5)+0.5, rando.nextDouble(0.75)+0.25);
-        Nation nat = new Nation(location.name,colour);
+        Nation nat = new Nation(location.name,colour,this);
         this.nations.add(nat);
         nat.territory.add(location);
         location.owner = nat;
@@ -122,6 +125,19 @@ class World {
         centre[1] += y;
         centre[2] ++;
 
+        if ( x < location.left ){
+          location.left = x;
+        }
+        if ( x > location.right ){
+          location.right = x;
+        }
+        if ( y < location.top ){
+          location.top = y;
+        }
+        if ( y > location.bottom ){
+          location.bottom = y;
+        }
+
         if(checkright){
           int otherid = ref[i+1];
           if(otherid != nolocation && otherid != id){
@@ -183,6 +199,14 @@ class World {
       double citysize = smoothCap(sqrt(location.population)*2, 20, 12, 2);
       double radius = (citysize-1)/2;
       image.fillRect(location.centre.x-radius, location.centre.y-radius , citysize, citysize);
+      for( Location neighbour in location.neighbours ) {
+        if ( location.roadDestinations.contains(neighbour) ) {
+          image.beginPath();
+          image.moveTo(location.centre.x, location.centre.y);
+          image.bezierCurveTo( location.centre.x, location.centre.y, neighbour.centre.x - 10, neighbour.centre.y + 10, neighbour.centre.x, neighbour.centre.y);
+          image.stroke();
+        }
+      }
     }
 
   }
