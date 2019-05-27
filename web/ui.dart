@@ -1,4 +1,3 @@
-import 'dart:html' as prefix0;
 import 'dart:math';
 
 import 'map/buildings.dart';
@@ -42,6 +41,7 @@ class Provinceview extends UI {
   Element buildinggrid;
   Element progressbar;
   Element neighbourlist;
+  Element provincetitle;
   List<Element> tabbuttons;
   List<Element> tabs;
 
@@ -49,6 +49,7 @@ class Provinceview extends UI {
     this.element = element;
     this.game = game;
     buildingtext = element.querySelector("#buildingtext");
+    provincetitle = element.querySelector("#provincetitle");
     buildinggrid = element.querySelector("#buildinggrid");
     progressbar = element.querySelector("#progressbar");
     neighbourlist = element.querySelector("#neighbourlist");
@@ -113,7 +114,8 @@ class Provinceview extends UI {
 
   @override
   void update(){
-    buildingtext.setInnerHtml("${location.name} <br>Population: ${location.population} / ${location.populationcap}");
+    provincetitle.setInnerHtml("${location.name}");
+    buildingtext.setInnerHtml("Population: ${location.population} / ${location.populationcap}");
     if ( location.underConstruction != null ){
       double progress = (location.constructionProgress / location.underConstruction.buildtime).clamp(0.0, 1.0);
       progressbar.children.first.style.width = "${(progress*100).toStringAsFixed(2)}%";
@@ -127,11 +129,16 @@ class Provinceview extends UI {
 }
 
 class Rightbar extends UI {
+  Element popinfo;
+  Element popclasses;
+  Nation nation;
 
 
   Rightbar(Element element, Gamestate game){
     this.element = element;
     this.game = game;
+    popinfo = element.querySelector("#popinfo");
+    popclasses = element.querySelector("#classes");
     fixClick();
   }
 
@@ -143,7 +150,13 @@ class Rightbar extends UI {
 
   @override
   void update(){
-    //element.text = "${game.calendar}";
+    popinfo.text = "Population Information";
+    if ( nation != null ){
+      popinfo.setInnerHtml(nation.getPopWeights(nation.popweights));
+    }
+    else {
+      popinfo.text = "SNARF";
+    }
   }
 
 

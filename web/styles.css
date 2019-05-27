@@ -6,19 +6,41 @@ html, body {
   margin: 0;
   padding: 0;
   font-family: 'Roboto', sans-serif;
-      -webkit-touch-callout: none; /* iOS Safari */
-        -webkit-user-select: none; /* Safari */
-         -khtml-user-select: none; /* Konqueror HTML */
-           -moz-user-select: none; /* Firefox */
-            -ms-user-select: none; /* Internet Explorer/Edge */
-                user-select: none; /* Non-prefixed version, currently
-                                      supported by Chrome and Opera */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 
 
 }
 
 #container {
     position: relative;
+}
+
+#mapimage{
+    background-image: url("map/mapglow.png");
+}
+
+#popinfo {
+    color: white;
+    width: 200px;
+    height: 300px;
+    position: absolute;
+    right: 10px;
+    bottom: 200px;
+}
+
+#popclasses {
+    color: white;
+    width: 300px;
+    height: 200px;
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    background-color: red;
 }
 
 #UI{
@@ -106,6 +128,7 @@ html, body {
     position: absolute;
     bottom: 0;
     box-sizing: border-box;
+    background-image: url("province_banner.png");
 }
 
 #output {
@@ -139,22 +162,52 @@ html, body {
     border: 1px solid white;
     box-sizing: border-box;
     padding: 3px;
+    position:absolute;
+    bottom:10px;
+    left:5px;
+}
+
+#provincetitle {
+    position:absolute;
+    top: 16px;
+    font-size: 22px;
+    left: 10px;
+}
+
+#buildingtext {
+    position: absolute;
+    height:180px;
+    width: 180px;
+    border: 1px solid white;
+    box-sizing: border-box;
+    padding: 3px;
+    bottom: 10px;
+    left: 200px;
 }
 
 .buildingbutton{
-    height: 60px;
+    height: 50px;
     width: 170px;
     box-size: border-box;
     border: 1px solid white;
     cursor: pointer;
+
+}
+
+#progressbar {
+    height: 20px;
+    width: 178px;
+    position:absolute;
+    bottom: 189px;
+    left:5px;
 }
 
 .progressbar{
-    height: 20px;
-    width: 178px;
+
     box-size: border-box;
     background-color: gray;
     border: 1px solid white;
+
 }
 
 .progressbar > div {

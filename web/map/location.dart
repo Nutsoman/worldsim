@@ -31,10 +31,19 @@ class Location with Modifiable {
 
   Location( int this.id, int this.population, String this.name, World this.world, Colour this.mapcolour );
 
+  void popsicle(){
+    this.population += 4000;
+    this.populationcap += 5000;
+  }
+
   void updateValues() {
     income = population*0.1;
     double popcap = getModValue("populationcap");
-    populationcap = 10 + popcap.floor();
+    double popmult = 1.05+getModValue("populationmult");
+    populationcap = populationcap + popcap.floor();
+    (populationcap * popmult).floor();
+    //Pops
+
   }
 
   @override

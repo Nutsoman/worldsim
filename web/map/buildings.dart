@@ -22,10 +22,17 @@ abstract class Buildings {
 
   static Future<void> init() async {
     Modifier buildingmod = new Modifier("pop_building_mod", true);
-    buildingmod.effects["populationcap"] = 2;
+    buildingmod.effects["populationcap"] = 100;
     Modifiers.add(buildingmod);
-    Building pop_building = new Building("pop_building", buildingmod, 0.1, 5);
+    Building pop_building = new Building("Farmland", buildingmod, 50, 40);
     add(pop_building);
+
+    Modifier buildingmultmod = new Modifier("pop_cap_mult_mod", true);
+    buildingmultmod.effects["populationmult"] = 0.05;
+    Modifiers.add(buildingmultmod);
+    Building pop_mult_building = new Building("Granary", buildingmultmod, 100, 120);
+    add(pop_mult_building);
+
   }
 
 }

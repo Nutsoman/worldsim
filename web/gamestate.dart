@@ -4,6 +4,7 @@ import 'map/world.dart';
 import 'map/location.dart';
 import 'package:CommonLib/Random.dart';
 import 'modifier.dart';
+import 'nations/pops.dart';
 import 'ui.dart';
 import 'nations/nation.dart';
 import 'dart:math' as Math;
@@ -32,7 +33,7 @@ class Gamestate {
   //State of the Game
 
   Gamestate(){
-    calendar = new Calendar(this,2455,4,17);
+    calendar = new Calendar(this,2455,4,28);
     world = new World(this);
   }
 
@@ -40,10 +41,15 @@ class Gamestate {
     await this.world.loadData("map/location_data.json","nations/nations.json","map/map.png");
     await Modifiers.init();
     await Buildings.init();
+    await Poptypes.init();
     querySelector("#map").append(world.mapimage);
     ui = new _Uiholder(this);
     for ( Location location in world.locations ){
+      location.popsicle();
       location.updateValues();
+    }
+    for ( Nation nation in world.nations ){
+      nation.initPoptypes();
     }
   }
 
@@ -57,12 +63,19 @@ class Gamestate {
         Location location = world.locations[id];
         ui.provinceview.open(location);
         ui.topbar.nation = location.owner;
+        ui.rightbar.nation = location.owner;
         ui.topbar.update();
+        for ( int i = 0; i < 20; i++ ) {
+          location.owner.addModifier("Aristocrats_growth");
+          print("noot");
+        }
+        location.owner.calcPopDistribution(location.owner.popweights);
       }
       else {
         ui.provinceview.hide();
         ui.topbar.nation = null;
         ui.topbar.update();
+        ui.rightbar.update();
       }
     }
   }
@@ -121,6 +134,7 @@ class Gamestate {
     }
     for( Nation nation in world.nations ){
       nation.monthlyUpdate(random);
+      print(nation.name);
     }
   }
 

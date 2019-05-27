@@ -77,6 +77,7 @@ class World {
     int w = image.width;
     int h = image.height;
     mapimage = new CanvasElement(width:w,height:h);
+    mapimage.id = "mapimage";
     CanvasRenderingContext2D ctx = mapimage.context2D;
     ctx.drawImage(image, 0, 0);
     Uint16List ref = new Uint16List(w*h);
@@ -225,7 +226,7 @@ class World {
       for (int x = 0; x < w; x++) {
         int i = y * w + x;
         if( ref[i] == nolocation ){
-          texpix[i] = 0xffff8060;
+          texpix[i] = 0x005f3605;
         }
         else{
           Location location = locations[ref[i]];
