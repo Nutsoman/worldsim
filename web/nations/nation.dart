@@ -17,50 +17,12 @@ class Nation with Modifiable {
 
   int globalpopulation = 0;
 
-  Map<Poptype, double> popweights;
+
 
   @override
   Gamestate get game => world.game;
 
   Nation(String this.name, Colour this.mapcolour, World this.world);
-
-  void initPoptypes(){
-    Map<Poptype, double> weights = <Poptype, double>{};
-    for ( Poptype poptype in Poptypes.list ){
-      weights[poptype] = poptype.size;
-      Modifier mod = new Modifier("${poptype.name}_growth", true);
-      mod.effects["${poptype.name}_growth"] = 0.01;
-      Modifiers.add(mod);
-    }
-    this.popweights = weights;
-  }
-
-  void calcPopDistribution( Map<Poptype,double> weights ) {
-    double total = 0;
-    for ( Poptype pop in weights.keys ){
-      weights[pop] *= 1+this.getModValue("${pop.name}_growth");
-      total += weights[pop];
-    }
-    for ( Poptype pop in weights.keys ) {
-      if ( weights[pop] != 0 ){
-        weights[pop] /= total;
-      }
-    }
-    this.popweights = weights;
-  }
-
-  String getPopWeights( Map<Poptype,double> weights ) {
-    StringBuffer sb = new StringBuffer();
-    sb.write("Population Information<br>");
-    for ( Poptype pop in weights.keys ){
-      sb.write(pop.name);
-      sb.write(": ");
-      sb.write((weights[pop]*100));
-      sb.write("%");
-      sb.write("<br>");
-    }
-    return sb.toString();
-  }
 
   void logicUpdate(){
 

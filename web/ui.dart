@@ -115,7 +115,7 @@ class Provinceview extends UI {
   @override
   void update(){
     provincetitle.setInnerHtml("${location.name}");
-    buildingtext.setInnerHtml("Population: ${location.population} / ${location.populationcap}");
+    buildingtext.setInnerHtml("Population: ${location.population} / ${location.surplusfood}<br>${location.getPopWeights(location.popweights)}");
     if ( location.underConstruction != null ){
       double progress = (location.constructionProgress / location.underConstruction.buildtime).clamp(0.0, 1.0);
       progressbar.children.first.style.width = "${(progress*100).toStringAsFixed(2)}%";
@@ -151,12 +151,12 @@ class Rightbar extends UI {
   @override
   void update(){
     popinfo.text = "Population Information";
-    if ( nation != null ){
-      popinfo.setInnerHtml(nation.getPopWeights(nation.popweights));
-    }
-    else {
-      popinfo.text = "SNARF";
-    }
+    //if ( nation != null ){
+    //  popinfo.setInnerHtml(nation.getPopWeights(nation.popweights));
+    //}
+    //else {
+    //  popinfo.text = "SNARF";
+    //}
   }
 
 

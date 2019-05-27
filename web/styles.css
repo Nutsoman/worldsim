@@ -249,3 +249,19 @@ html, body {
     cursor: default;
 
 }
+
+.valuegreen {
+    color: green;
+}
+
+.valueyellow {
+    color: yellow;
+}
+
+.valuered {
+    color: red;
+}
+
+table {
+    width: 100%;
+}

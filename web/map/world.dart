@@ -197,7 +197,7 @@ class World {
 
     for ( Location location in locations ) {
       //Make it black
-      double citysize = smoothCap(sqrt(location.population)*2, 20, 12, 2);
+      double citysize = smoothCap(sqrt(location.population)*0.1, 20, 12, 2);
       double radius = (citysize-1)/2;
       image.fillRect(location.centre.x-radius, location.centre.y-radius , citysize, citysize);
       for( Location neighbour in location.neighbours ) {

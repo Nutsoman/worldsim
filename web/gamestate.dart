@@ -45,11 +45,11 @@ class Gamestate {
     querySelector("#map").append(world.mapimage);
     ui = new _Uiholder(this);
     for ( Location location in world.locations ){
-      location.popsicle();
       location.updateValues();
     }
-    for ( Nation nation in world.nations ){
-      nation.initPoptypes();
+    for ( Location location in world.locations ){
+      location.initPoptypes();
+      location.dailyUpdate();
     }
   }
 
@@ -65,11 +65,12 @@ class Gamestate {
         ui.topbar.nation = location.owner;
         ui.rightbar.nation = location.owner;
         ui.topbar.update();
-        for ( int i = 0; i < 20; i++ ) {
+        for ( int i = 0; i < 200; i++ ) {
           location.owner.addModifier("Aristocrats_growth");
           print("noot");
         }
-        location.owner.calcPopDistribution(location.owner.popweights);
+        location.calcPopDistribution(location.popweights);
+        print(location.lastmonthsgrowth);
       }
       else {
         ui.provinceview.hide();
@@ -245,11 +246,28 @@ class _Uiholder{
   }
 
 
-
   List<UI> _uis;
   List<UI> get uis {
     _uis ??= <UI>[provinceview,rightbar,topbar];
     return _uis;
+  }
+
+}
+
+class Utils {
+
+  static String getTextColor(int value){
+    String ret;
+    if ( value > 0 ){
+      ret = "<span class=\"valuegreen\">+${value}</span>";
+    }
+    else if ( value == 0 ){
+      ret = "<span class=\"valueyellow\">+${value}</span>";
+    }
+    else {
+      ret = "<span class=\"valuered\">${value}</span>";
+    }
+    return ret;
   }
 
 }
