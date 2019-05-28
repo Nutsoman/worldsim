@@ -1,13 +1,17 @@
 import 'dart:html';
 import 'map/buildings.dart';
+import 'map/pathfinder.dart';
 import 'map/world.dart';
-import 'map/location.dart';
+import 'map/territory.dart';
 import 'package:CommonLib/Random.dart';
 import 'modifier.dart';
 import 'nations/pops.dart';
 import 'ui.dart';
 import 'nations/nation.dart';
 import 'dart:math' as Math;
+
+import 'units/UnitTypes.dart';
+import 'units/army.dart';
 
 class Gamestate {
 
@@ -27,6 +31,8 @@ class Gamestate {
 
   Point<num> mousepos;
   Point<num> startposition;
+  Set<Army> selectedarmies = <Army>{};
+  Set<int> keysheld = <int>{};
 
   _Uiholder ui;
 
@@ -42,33 +48,53 @@ class Gamestate {
     await Modifiers.init();
     await Buildings.init();
     await Poptypes.init();
+    await UnitTypes.init();
+    Territory.init(this);
+    Nation.init(this);
     querySelector("#map").append(world.mapimage);
     ui = new _Uiholder(this);
-    for ( Location location in world.locations ){
-      location.updateValues();
-    }
-    for ( Location location in world.locations ){
-      location.initPoptypes();
-      location.dailyUpdate();
-    }
+
+  }
+
+  void keydown(KeyboardEvent event){
+    keysheld.add(event.keyCode);
+  }
+
+  void keyup(KeyboardEvent event){
+    keysheld.remove(event.keyCode);
   }
 
   void click(MouseEvent event) {
+    print("Click ${event.button}");
+    int x = event.offset.x + window.scrollX;
+    int y = event.offset.y + window.scrollY;
     if ( event.button == 0 ){
-      int x = event.offset.x + window.scrollX;
-      int y = event.offset.y + window.scrollY;
+      for ( Nation nation in world.nations ){
+        for( Army army in nation.armies ){
+          Point<int> pos = army.getPosition();
+          int diffx = pos.x-x;
+          int diffy = pos.y-y;
+          double dist = Math.sqrt(diffx*diffx+diffy*diffy);
+          if ( dist < 12 ){
+            if ( !keysheld.contains(16) ) {
+              this.selectedarmies.clear();
+            }
+            this.selectedarmies.add(army);
+            return;
+          }
+        }
+      }
+
+      this.selectedarmies.clear();
+
       int index = world.mapimage.width * y + x;
       int id = world.locationlookup[index];
       if (id != World.nolocation) {
-        Location location = world.locations[id];
+        Territory location = world.locations[id];
         ui.provinceview.open(location);
         ui.topbar.nation = location.owner;
         ui.rightbar.nation = location.owner;
         ui.topbar.update();
-        for ( int i = 0; i < 200; i++ ) {
-          location.owner.addModifier("Aristocrats_growth");
-          print("noot");
-        }
         location.calcPopDistribution(location.popweights);
         print(location.lastmonthsgrowth);
       }
@@ -77,6 +103,22 @@ class Gamestate {
         ui.topbar.nation = null;
         ui.topbar.update();
         ui.rightbar.update();
+      }
+    }
+    else if ( event.button == 2 ){
+      int index = world.mapimage.width * y + x;
+      int id = world.locationlookup[index];
+      if ( id != World.nolocation ) {
+        bool redraw = false;
+        print("YES");
+        Territory location = world.locations[id];
+        for (Army army in selectedarmies) {
+          army.moveOrder(location, keysheld.contains(16));
+          redraw = true;
+        }
+        if ( redraw ){
+          world.drawMap(0);
+        }
       }
     }
   }
@@ -106,11 +148,14 @@ class Gamestate {
   void logicUpdate(num dt) {
     //things
     calendar.updateCalendar();
-    for( Location location in world.locations ){
+    for( Territory location in world.locations ){
       location.logicUpdate();
     }
     for( Nation nation in world.nations ){
       nation.logicUpdate();
+      for ( Army army in nation.armies ){
+        army.logicUpdate();
+      }
     }
     for( UI ui in this.ui.uis ){
       if( ui.visible ){
@@ -121,7 +166,7 @@ class Gamestate {
   }
 
   void dailyUpdate() {
-    for( Location location in world.locations ){
+    for( Territory location in world.locations ){
       location.dailyUpdate();
     }
     for( Nation nation in world.nations ){
@@ -130,7 +175,7 @@ class Gamestate {
   }
 
   void monthlyUpdate() {
-    for( Location location in world.locations ){
+    for( Territory location in world.locations ){
       location.monthlyUpdate(random);
     }
     for( Nation nation in world.nations ){
@@ -214,16 +259,21 @@ class _Uiholder{
 
   _Uiholder(Gamestate this.game){
     this.element = querySelector("#UI");
-    this.element.onClick.listen(game.click);
     this.drawlayer = querySelector("#mousedraw");
     document.onResize.listen(resize);
     document.onScroll.listen(resize);
+    document.onKeyDown.listen(game.keydown);
+    document.onKeyUp.listen(game.keyup);
     querySelector("#container").style..width = "${game.world.mapimage.width}px"..height = "${game.world.mapimage.height}px";
 
     this.provinceview = new Provinceview(querySelector("#province_view"),game);
     this.rightbar = new Rightbar(querySelector("#rightbar"),game);
     this.topbar = new Topbar(querySelector("#topbar"),game);
-
+    this.element.onClick.listen(game.click);
+    this.element.onContextMenu.listen((MouseEvent event){
+      event.preventDefault();
+      game.click(event);
+    });
   }
 
   void resize(Event event){
@@ -254,7 +304,7 @@ class _Uiholder{
 
 }
 
-class Utils {
+class TextUtils {
 
   static String getTextColor(int value){
     String ret;

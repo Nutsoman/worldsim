@@ -1,4 +1,4 @@
-import 'location.dart';
+import 'territory.dart';
 import '../modifier.dart';
 
 class Building {

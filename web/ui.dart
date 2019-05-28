@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'map/buildings.dart';
-import 'map/location.dart';
+import 'map/territory.dart';
 import 'dart:html';
 import 'gamestate.dart';
 import 'map/world.dart';
@@ -36,7 +36,7 @@ abstract class UI {
 }
 
 class Provinceview extends UI {
-  Location location;
+  Territory location;
   Element buildingtext;
   Element buildinggrid;
   Element progressbar;
@@ -97,13 +97,13 @@ class Provinceview extends UI {
 
 
 
-  void open(Location loc){
+  void open(Territory loc){
     this.location = loc;
     neighbourlist.children.clear();
-    for ( Location neighbour in location.neighbours ){
+    for ( Territory neighbour in location.neighbours ){
       Element button = new DivElement()
         ..className = "neighbourbutton"
-        ..text = neighbour.name;
+        ..text = "${neighbour.name} (${location.neighbourdist[neighbour]})";
       neighbourlist.append(button);
       button.onClick.listen((MouseEvent e ){ this.location.buildRoad(neighbour); });
     }
@@ -142,7 +142,7 @@ class Rightbar extends UI {
     fixClick();
   }
 
-  void open(Location loc){
+  void open(Territory loc){
     this.game = game;
     update();
     show();

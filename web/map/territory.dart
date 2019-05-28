@@ -9,13 +9,14 @@ import 'package:CommonLib/Colours.dart';
 import '../nations/nation.dart';
 import 'package:CommonLib/Random.dart';
 
-class Location with Modifiable {
+class Territory with Modifiable {
   final int id;
   int population;
   double income;
   String name;
   Colour mapcolour;
-  Set<Location> neighbours = <Location>{};
+  Set<Territory> neighbours = <Territory>{};
+  Map<Territory,int> neighbourdist = <Territory,int>{};
   Point<int> centre;
   Nation owner;
   double growthrate = 1.05;
@@ -23,7 +24,7 @@ class Location with Modifiable {
   Building underConstruction;
   double constructionProgress;
   Map<Building,int> buildings = <Building,int>{};
-  List<Location> roadDestinations = <Location>[];
+  List<Territory> roadDestinations = <Territory>[];
   int left = 1000000;
   int right = -1;
   int top = 1000000;
@@ -35,7 +36,17 @@ class Location with Modifiable {
 
   final World world;
 
-  Location( int this.id, int this.population, String this.name, World this.world, Colour this.mapcolour );
+  Territory( int this.id, int this.population, String this.name, World this.world, Colour this.mapcolour );
+
+  static void init(Gamestate game){
+    for ( Territory location in game.world.locations ){
+      location.updateValues();
+    }
+    for ( Territory location in game.world.locations ){
+      location.initPoptypes();
+      location.dailyUpdate();
+    }
+  }
 
   void initPoptypes(){
     Random random = new Random();
@@ -60,7 +71,7 @@ class Location with Modifiable {
     StringBuffer sb = new StringBuffer();
     sb.write("<table>");
     for ( Poptype pop in weights.keys ){
-      final String colored = Utils.getTextColor(lastmonthsgrowth[pop]);
+      final String colored = TextUtils.getTextColor(lastmonthsgrowth[pop]);
       sb.write("<tr>");
       sb.write("<td>${pop.name}</td>");
       sb.write("<td>${weights[pop]}</td>");
@@ -118,22 +129,11 @@ class Location with Modifiable {
 
   void monthlyUpdate(Random random) {
     this.cleanupModifiers();
-    if ( population < surplusfood && owner != null ){
+    if ( owner != null ){
       for (Poptype pop in popweights.keys) {
-        if ( population < surplusfood ){
-          int i = ((game.random.nextInt(3)+getModValue("${pop.name}_growth")+owner.getModValue("${pop.name}_growth")+(surplusfood-population)*0.05)*poptypepercentage[pop]).floor();
-          popweights[pop] += i;
-          lastmonthsgrowth[pop] = i;
-        }
-      }
-    }
-    else if ( population > surplusfood && owner != null ){
-      for (Poptype pop in popweights.keys) {
-        if ( population > surplusfood ) {
-          int i = -1-(((surplusfood-population)-(popweights[pop]*0.1))*poptypepercentage[pop]).floor();
-          popweights[pop] += i;
-          lastmonthsgrowth[pop] = i;
-        }
+        int i = ((game.random.nextInt(3)+getModValue("${pop.name}_growth")+owner.getModValue("${pop.name}_growth")+(surplusfood-population)*0.05)*poptypepercentage[pop]).floor();
+        popweights[pop] += i;
+        lastmonthsgrowth[pop] = i;
       }
     }
     updateValues();
@@ -149,7 +149,7 @@ class Location with Modifiable {
       }
   }
 
-  void buildRoad(Location neighbour){
+  void buildRoad(Territory neighbour){
     if ( !roadDestinations.contains(neighbour) && !neighbour.roadDestinations.contains(this) ){
       roadDestinations.add(neighbour);
       world.drawMap(0);
