@@ -23,11 +23,16 @@ class Army {
 
   void logicUpdate(){
     if ( unitdestination != null ){
-      moveprogress += (speed*basespeed)/unitlocation.neighbourdist[unitdestination];
-      if ( moveprogress >= 1 ){
-        unitlocation = unitdestination;
+      if ( unitlocation == unitdestination){
         unitdestination = null;
-        _processMoveOrder();
+      }
+      else {
+        moveprogress += (speed * basespeed) / unitlocation.neighbourdist[unitdestination];
+        if (moveprogress >= 1) {
+          unitlocation = unitdestination;
+          unitdestination = null;
+          _processMoveOrder();
+        }
       }
     }
   }
@@ -70,7 +75,7 @@ class Army {
   }
 
   void _processMoveOrder(){
-    if ( path.isNotEmpty && unitdestination == null ){
+    if ( haspath && unitdestination == null ){
       Territory next = path.removeLast();
       if ( next == unitlocation ){
         _processMoveOrder();
