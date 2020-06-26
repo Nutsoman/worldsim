@@ -1,13 +1,14 @@
 import 'dart:math';
 
+import 'package:CommonLib/Colours.dart';
+import 'package:CommonLib/Random.dart';
+
 import '../gamestate.dart';
 import '../modifier.dart';
+import '../nations/nation.dart';
 import '../nations/pops.dart';
 import 'buildings.dart';
 import 'world.dart';
-import 'package:CommonLib/Colours.dart';
-import '../nations/nation.dart';
-import 'package:CommonLib/Random.dart';
 
 class Territory with Modifiable {
   final int id;

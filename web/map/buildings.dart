@@ -1,4 +1,3 @@
-import 'territory.dart';
 import '../modifier.dart';
 
 class Building {

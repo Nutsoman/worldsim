@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:html';
+
 import 'gamestate.dart';
 import 'map/world.dart';
 

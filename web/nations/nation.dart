@@ -7,8 +7,6 @@ import '../map/world.dart';
 import '../modifier.dart';
 import '../units/UnitTypes.dart';
 import '../units/army.dart';
-import 'pops.dart';
-import 'package:CommonLib/Random.dart';
 
 class Nation with Modifiable {
   Set<Territory> territory = <Territory>{};

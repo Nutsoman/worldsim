@@ -1,10 +1,8 @@
-import 'dart:math';
+import 'dart:html';
 
+import 'gamestate.dart';
 import 'map/buildings.dart';
 import 'map/territory.dart';
-import 'dart:html';
-import 'gamestate.dart';
-import 'map/world.dart';
 import 'nations/nation.dart';
 
 abstract class UI {

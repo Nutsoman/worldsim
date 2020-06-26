@@ -1,19 +1,17 @@
-import 'dart:html' as prefix0;
+import 'dart:async';
+import 'dart:html';
 import 'dart:math' as Math;
+import 'dart:typed_data';
+
+import 'package:CommonLib/Colours.dart';
 import 'package:CommonLib/Random.dart' as Common;
+import 'package:CommonLib/Utility.dart';
+import 'package:LoaderLib/Loader.dart';
 
 import '../gamestate.dart';
+import '../nations/nation.dart';
 import '../units/army.dart';
 import "territory.dart";
-import 'dart:async';
-import 'package:LoaderLib/Loader.dart';
-import 'package:CommonLib/Utility.dart';
-import 'package:CommonLib/Colours.dart';
-import 'dart:html';
-import 'dart:typed_data';
-import '../nations/nation.dart';
-
-import 'territory.dart' as prefix1;
 
 class World {
     List<Territory> locations = <Territory>[];
