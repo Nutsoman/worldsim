@@ -7,6 +7,7 @@ import '../gamestate.dart';
 import '../modifier.dart';
 import '../nations/nation.dart';
 import '../nations/pops.dart';
+import '../units/army.dart';
 import 'buildings.dart';
 import 'world.dart';
 
@@ -33,11 +34,14 @@ class Territory with Modifiable {
   Map<Poptype, int> popweights;
   Map<Poptype, int> lastmonthsgrowth = <Poptype, int>{};
   Map<Poptype, double> poptypepercentage = <Poptype,double>{};
-
+  double baseDefenseModifier;
+  double totalDefenseModifier;
+  Set<Army> localArmies = <Army>{};
+  Set<Army> seenBy = <Army>{};
 
   final World world;
 
-  Territory( int this.id, int this.population, String this.name, World this.world, Colour this.mapcolour );
+  Territory( int this.id, int this.population, String this.name, World this.world, Colour this.mapcolour, double this.baseDefenseModifier );
 
   static void init(Gamestate game){
     for ( Territory location in game.world.locations ){
@@ -89,10 +93,11 @@ class Territory with Modifiable {
 
   void updateValues() {
     income = population*0.1;
-    double popcap = getModValue("populationcap");
-    surplusfood = surplusfood + popcap.floor();
-    //Pops
+  }
 
+  void calcModifiers() {
+    double defensiveness = getModValue("defensiveness");
+    totalDefenseModifier = baseDefenseModifier + defensiveness;
   }
 
   @override
@@ -107,7 +112,7 @@ class Territory with Modifiable {
         buildings[underConstruction]++;
         this.addModifierObj(underConstruction.mod);
         underConstruction = null;
-        updateValues();
+        calcModifiers();
 
       }
       else {
@@ -141,12 +146,9 @@ class Territory with Modifiable {
   }
 
   void startBuilding(Building building){
-      if ( underConstruction == null ){
-        if ( this.owner != null && this.owner.treasury >= building.cost ){
-          this.owner.treasury -= building.cost;
-          underConstruction = building;
-          constructionProgress = 0;
-        }
+      if ( underConstruction == null ) {
+        underConstruction = building;
+        constructionProgress = 0;
       }
   }
 

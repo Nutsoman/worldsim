@@ -4,6 +4,8 @@ import 'gamestate.dart';
 import 'map/buildings.dart';
 import 'map/territory.dart';
 import 'nations/nation.dart';
+import 'units/army.dart';
+import 'utils.dart';
 
 abstract class UI {
   bool visible = true;
@@ -38,7 +40,6 @@ class Provinceview extends UI {
   Element buildingtext;
   Element buildinggrid;
   Element progressbar;
-  Element neighbourlist;
   Element provincetitle;
   List<Element> tabbuttons;
   List<Element> tabs;
@@ -50,10 +51,9 @@ class Provinceview extends UI {
     provincetitle = element.querySelector("#provincetitle");
     buildinggrid = element.querySelector("#buildinggrid");
     progressbar = element.querySelector("#progressbar");
-    neighbourlist = element.querySelector("#neighbourlist");
 
-    tabbuttons = <Element>[element.querySelector("#infotabbutton"),element.querySelector("#neighbourtabbutton")];
-    tabs = <Element>[element.querySelector("#infotab"),element.querySelector("#neighbourtab")];
+    tabbuttons = <Element>[element.querySelector("#infotabbutton")];
+    tabs = <Element>[element.querySelector("#infotab")];
 
     for ( int i = 0; i < tabbuttons.length; i++ ){
       Element button = tabbuttons[i];
@@ -97,14 +97,6 @@ class Provinceview extends UI {
 
   void open(Territory loc){
     this.location = loc;
-    neighbourlist.children.clear();
-    for ( Territory neighbour in location.neighbours ){
-      Element button = new DivElement()
-        ..className = "neighbourbutton"
-        ..text = "${neighbour.name} (${location.neighbourdist[neighbour]})";
-      neighbourlist.append(button);
-      button.onClick.listen((MouseEvent e ){ this.location.buildRoad(neighbour); });
-    }
     update();
     show();
     print(loc.modifiers);
@@ -112,8 +104,15 @@ class Provinceview extends UI {
 
   @override
   void update(){
-    provincetitle.setInnerHtml("${location.name}");
-    buildingtext.setInnerHtml("Population: ${location.population} / ${location.surplusfood}<br>${location.getPopWeights(location.popweights)}");
+    provincetitle.setInnerHtml("Hex ${location.name}");
+    String ret = "Defense: ${location.totalDefenseModifier.getRounded()}<br><br>";
+    if ( !location.localArmies.isEmpty ) {
+      ret += "Units Present:<br>";
+    }
+    for ( Army army in location.localArmies ) {
+      ret += "${ army.owner.name }<br>";
+    }
+    buildingtext.setInnerHtml( ret );
     if ( location.underConstruction != null ){
       double progress = (location.constructionProgress / location.underConstruction.buildtime).clamp(0.0, 1.0);
       progressbar.children.first.style.width = "${(progress*100).toStringAsFixed(2)}%";
@@ -148,13 +147,18 @@ class Rightbar extends UI {
 
   @override
   void update(){
-    popinfo.text = "Population Information";
-    //if ( nation != null ){
-    //  popinfo.setInnerHtml(nation.getPopWeights(nation.popweights));
-    //}
-    //else {
-    //  popinfo.text = "SNARF";
-    //}
+    //popinfo.text = "Army Information";
+    String ret = "";
+    for ( Army army in game.selectedarmies ){
+     ret += "<br>${ army.owner.name }<br>";
+     for ( Subunit sub in army.subunits.keys )
+       {
+         ret += "${ sub.type.name }: ";
+         ret += "${ army.subunits[sub] }";
+         ret += "<br>";
+       }
+    }
+    popinfo.setInnerHtml( ret );
   }
 
 

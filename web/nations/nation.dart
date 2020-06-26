@@ -17,6 +17,7 @@ class Nation with Modifiable {
   Territory capital;
   List<Army> armies = <Army>[];
   int globalpopulation = 0;
+  Territory startzone;
 
 
 
@@ -28,8 +29,15 @@ class Nation with Modifiable {
   static void init(Gamestate game){
     for ( Nation nation in game.world.nations ){
       nation.getNewCapital();
-      Army army = nation.createArmy(nation.capital);
-      army.addSubUnit(new Subunit(UnitTypes.byname["Levy"]));
+      Army army = nation.createArmy(nation.startzone);
+      double amount = game.random.nextDouble( 500.0 );
+      army.addSubUnit(new Subunit(UnitTypes.byname["Screaming Maniac"]), amount.ceilToDouble() );
+      double amount2 = game.random.nextDouble( 100.0 );
+      army.addSubUnit(new Subunit(UnitTypes.byname["Dune Buggy"]), amount2.ceilToDouble() );
+      if ( amount2 > 75.0 ) {
+        army.addSubUnit(new Subunit(UnitTypes.byname["Weird Guy with a Saucepan"]), 1.0 );
+      }
+      army.onEnterTerritory(); //setup required
     }
   }
 

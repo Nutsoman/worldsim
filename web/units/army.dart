@@ -7,7 +7,7 @@ import '../nations/nation.dart';
 import 'UnitTypes.dart';
 
 class Army {
-  List<Subunit> subunits = <Subunit>[];
+  Map<Subunit, double> subunits = <Subunit, double>{};
   Nation owner;
   Territory unitlocation;
   Territory unitdestination;
@@ -17,6 +17,7 @@ class Army {
   List<Territory> path;
   bool get haspath => path != null && path.isNotEmpty;
   static const double basespeed = 16;
+  Set<Territory> reconTargets = <Territory>{};
 
   Army( Nation this.owner, Territory this.unitlocation ){
     game = owner.game;
@@ -30,12 +31,19 @@ class Army {
       else {
         moveprogress += (speed * basespeed) / unitlocation.neighbourdist[unitdestination];
         if (moveprogress >= 1) {
+          unitlocation.localArmies.remove(this);
           unitlocation = unitdestination;
+          onEnterTerritory();
           unitdestination = null;
           _processMoveOrder();
         }
       }
     }
+  }
+
+  void onEnterTerritory() {
+    unitlocation.localArmies.add(this);
+    updateRecon();
   }
 
   void move(Territory dest) {
@@ -46,11 +54,26 @@ class Army {
     unitdestination = dest;
   }
 
+  void updateRecon() {
+    for ( Territory territory in reconTargets ) {
+      territory.seenBy.remove( this );
+    }
+    reconTargets.clear();
+    reconTargets.add( this.unitlocation );
+    for ( Territory territory in this.unitlocation.neighbours ) {
+      reconTargets.add( territory );
+    }
+    for ( Territory territory in reconTargets ) {
+      territory.seenBy.add( this );
+    }
+    owner.world.redrawMapTexture(); //expensive :(
+  }
+
   void updateValues(){
     double i = 10000;
-    for ( Subunit subunit in subunits ){
-      if ( subunit.type.speed < i ){
-        i = subunit.type.speed;
+    for ( Subunit sub in subunits.keys ){
+      if ( sub.type.speed < i ){
+        i = sub.type.speed;
       }
     }
     this.speed = i;
@@ -99,8 +122,9 @@ class Army {
     return new Point<int>(x,y);
   }
 
-  void addSubUnit( Subunit subunit ){
-    subunits.add(subunit);
+  void addSubUnit( Subunit subunit, double amount ){
+    print( subunit.type.name );
+    this.subunits[subunit] = amount;
     subunit.army = this;
     this.updateValues();
   }

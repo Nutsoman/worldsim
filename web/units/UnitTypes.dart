@@ -5,7 +5,7 @@ class UnitType{
   int size;
   double speed;
 
-  UnitType( String this.name, int this.size, double this.speed );
+  UnitType( String this.name, double this.speed );
 
 }
 
@@ -23,8 +23,14 @@ abstract class UnitTypes {
 
     //Generate Poptypes
 
-    UnitType levy = new UnitType("Levy", 100, 1.0);
+    UnitType levy = new UnitType("Screaming Maniac", 1.0);
     add(levy);
+
+    UnitType tanks = new UnitType("Dune Buggy", 2.0);
+    add(tanks);
+
+    UnitType saucepan = new UnitType("Weird Guy with a Saucepan", 1.0);
+    add(saucepan);
 
   }
 

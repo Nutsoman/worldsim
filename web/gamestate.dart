@@ -80,6 +80,7 @@ class Gamestate {
               this.selectedarmies.clear();
             }
             this.selectedarmies.add(army);
+            ui.updateAll();
             return;
           }
         }
@@ -101,8 +102,6 @@ class Gamestate {
       else {
         ui.provinceview.hide();
         ui.topbar.nation = null;
-        ui.topbar.update();
-        ui.rightbar.update();
       }
     }
     else if ( event.button == 2 ){
@@ -121,6 +120,7 @@ class Gamestate {
         }
       }
     }
+    ui.updateAll();
   }
 
   //TimeyWimey
@@ -246,7 +246,6 @@ class Calendar {
   String toString(){
     return "${tick+1} ${day+1}.${month+1}.$year";
   }
-
 }
 
 class _Uiholder{
@@ -292,9 +291,16 @@ class _Uiholder{
 
   void update(){
     clear();
-
   }
 
+  void updateAll() {
+    for ( UI ui in this.uis ) {
+      if ( ui.visible )
+        {
+          ui.update();
+        }
+    }
+  }
 
   List<UI> _uis;
   List<UI> get uis {

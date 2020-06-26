@@ -11,7 +11,8 @@ import 'package:LoaderLib/Loader.dart';
 import '../gamestate.dart';
 import '../nations/nation.dart';
 import '../units/army.dart';
-import "territory.dart";
+import 'territory.dart';
+import '../utils.dart';
 
 class World {
     List<Territory> locations = <Territory>[];
@@ -35,10 +36,14 @@ class World {
         List<Map<String,dynamic>> locations = json.getArray("Locations");
         int id = 0;
         for( Map<String,dynamic> location in locations ){
-            Territory loc = new Territory(id,location["population"],location["name"],this,new Colour(location["mapcolour"][0],location["mapcolour"][1],location["mapcolour"][2]));
+            Territory loc = new Territory(id,location["population"],location["name"],this,new Colour(location["mapcolour"][0],location["mapcolour"][1],location["mapcolour"][2]), location["defense"] );
             this.locations.add(loc);
             locationsbyname[loc.name] = loc;
             id++;
+        }
+
+        for ( Territory territory in this.locations ) {
+            territory.calcModifiers();
         }
 
         //Load Nation Data
@@ -50,12 +55,11 @@ class World {
             this.nations.add(nat);
             List<dynamic> locationids = nation["territory"];
             for ( String lid in locationids ){
-                nat.territory.add(this.locationsbyname[lid]);
-                this.locationsbyname[lid].owner = nat;
+                nat.startzone = this.locationsbyname[lid];
             }
         }
 
-        for( Territory location in this.locations ){
+        /*for( Territory location in this.locations ){
             if ( location.owner == null ){
                 Common.Random rando = new Common.Random(location.id);
                 Colour colour = new Colour.hsv(rando.nextDouble(), rando.nextDouble(0.5)+0.5, rando.nextDouble(0.75)+0.25);
@@ -64,7 +68,7 @@ class World {
                 nat.territory.add(location);
                 location.owner = nat;
             }
-        }
+        }*/
 
         //Run Init
         ImageElement mapimage = await Loader.getResource(image);
@@ -204,24 +208,20 @@ class World {
         CanvasRenderingContext2D image = mapimage.context2D;
         int w = mapimage.width;
         int h = mapimage.height;
+        int textPixelWidth = 40;
         image.clearRect(0, 0, w, h);
         image.drawImage(maptexture, 0, 0);
 
         image.fillStyle = "black";
+        image.textAlign = "center";
+        image.textBaseline = "middle";
 
         for ( Territory location in locations ) {
             //Make it black
-            double citysize = smoothCap(Math.sqrt(location.population)*0.1, 20, 12, 2);
-            double radius = (citysize-1)/2;
-            image.fillRect(location.centre.x-radius, location.centre.y-radius , citysize, citysize);
-            for( Territory neighbour in location.neighbours ) {
-                if ( location.roadDestinations.contains(neighbour) ) {
-                    image.beginPath();
-                    image.moveTo(location.centre.x, location.centre.y);
-                    image.bezierCurveTo( location.centre.x, location.centre.y, neighbour.centre.x - 10, neighbour.centre.y + 10, neighbour.centre.x, neighbour.centre.y);
-                    image.stroke();
-                }
-            }
+            //double citysize = smoothCap(Math.sqrt(location.population)*0.1, 20, 12, 2);
+            //double radius = (citysize-1)/2;
+            //image.fillRect(location.centre.x-radius, location.centre.y-radius , citysize, citysize);
+            image.fillText("${ location.totalDefenseModifier.getRounded()  }", location.centre.x, location.centre.y+1, textPixelWidth );
         }
         for ( Nation nation in nations ) {
             for (Army army in nation.armies) {
@@ -323,6 +323,9 @@ class World {
                     else {
                         if ( location.owner != null ){
                             texpix[i] = location.owner.mapcolour.toImageDataInt32();
+                        }
+                        else if ( location.seenBy.isNotEmpty ){
+                            texpix[i] = (location.seenBy.first.owner.mapcolour*1.25).toImageDataInt32();
                         }
                         else {
                             texpix[i] = 0xff60ff80;

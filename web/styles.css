@@ -29,8 +29,9 @@ html, body {
     width: 200px;
     height: 300px;
     position: absolute;
-    right: 10px;
+    right: 20px;
     bottom: 200px;
+    font-size: 10px;
 }
 
 #popclasses {
@@ -134,26 +135,6 @@ html, body {
 #output {
   padding: 20px;
   text-align: center;
-}
-
-#neighbourlist{
-    height: 202px;
-    width: 168px;
-    border: 1px solid white;
-    box-sizing: border-box;
-    padding: 3px;
-    position: absolute;
-    right: 10px;
-    top: 68px;
-    overflow-y: scroll;
-}
-
-.neighbourbutton {
-    height: 30px;
-    width: 140px;
-    box-size: border-box;
-    border: 1px solid white;
-    cursor: pointer;
 }
 
 #buildinggrid {
