@@ -8,6 +8,7 @@ import 'package:CommonLib/Random.dart' as Common;
 import 'package:CommonLib/Utility.dart';
 import 'package:LoaderLib/Loader.dart';
 
+import '../combat/combat.dart';
 import '../gamestate.dart';
 import '../nations/nation.dart';
 import '../units/army.dart';
@@ -18,6 +19,7 @@ class World {
     List<Territory> locations = <Territory>[];
     Map<String,Territory> locationsbyname = <String,Territory>{};
     List<Nation> nations = <Nation>[];
+    Set<Skirmish> skirmishes = <Skirmish>{};
 
     static const int nolocation = 0xffff;
     Uint16List  locationlookup;

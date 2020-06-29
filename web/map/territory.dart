@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:CommonLib/Colours.dart';
 import 'package:CommonLib/Random.dart';
 
+import '../combat/combat.dart';
 import '../gamestate.dart';
 import '../modifier.dart';
 import '../nations/nation.dart';
@@ -38,6 +39,8 @@ class Territory with Modifiable {
   double totalDefenseModifier;
   Set<Army> localArmies = <Army>{};
   Set<Army> seenBy = <Army>{};
+  int combatWidth = 32;
+  Set<ConflictHex> ongoingConflicts = <ConflictHex>{};
 
   final World world;
 

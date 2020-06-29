@@ -1,5 +1,6 @@
 import 'dart:html';
 
+import '../combat/combat.dart';
 import '../gamestate.dart';
 import '../map/pathfinder.dart';
 import '../map/territory.dart';
@@ -18,6 +19,7 @@ class Army {
   bool get haspath => path != null && path.isNotEmpty;
   static const double basespeed = 16;
   Set<Territory> reconTargets = <Territory>{};
+  Side incombat;
 
   Army( Nation this.owner, Territory this.unitlocation ){
     game = owner.game;
@@ -28,7 +30,7 @@ class Army {
       if ( unitlocation == unitdestination){
         unitdestination = null;
       }
-      else {
+      else if ( incombat == null ) {
         moveprogress += (speed * basespeed) / unitlocation.neighbourdist[unitdestination];
         if (moveprogress >= 1) {
           unitlocation.localArmies.remove(this);
@@ -44,6 +46,27 @@ class Army {
   void onEnterTerritory() {
     unitlocation.localArmies.add(this);
     updateRecon();
+    startCombats();
+  }
+
+  void startCombats() {
+    for ( Territory scan in reconTargets ) {
+      if ( scan.localArmies.isNotEmpty ) {
+        for ( Army target in scan.localArmies ) {
+          if ( target != this && target.incombat == null ) {
+            new Skirmish( 0, this, target, target.unitlocation );
+          }
+          else if ( target.incombat != null && target.owner == this.owner )
+          {
+            target.incombat.addArmy(this);
+          }
+        }
+      }
+    }
+  }
+
+  void lockForCombat( Side side ) {
+    incombat = side;
   }
 
   void move(Territory dest) {

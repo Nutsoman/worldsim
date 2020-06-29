@@ -3,6 +3,7 @@ import 'dart:math' as Math;
 
 import 'package:CommonLib/Random.dart';
 
+import 'combat/combat.dart';
 import 'map/buildings.dart';
 import 'map/territory.dart';
 import 'map/world.dart';
@@ -172,6 +173,21 @@ class Gamestate {
     for( Nation nation in world.nations ){
       nation.dailyUpdate();
     }
+
+    Set<Skirmish> toCull = <Skirmish>{};
+
+    for ( Skirmish skirmish in world.skirmishes ){
+      bool skirmishOver = skirmish.update();
+      if ( skirmishOver ) {
+        skirmish.cull(); //garbage collection........... why
+        toCull.add(skirmish);
+      }
+    }
+
+    for ( Skirmish killit in toCull ){
+      world.skirmishes.remove(killit);
+    }
+    toCull.clear();
   }
 
   void monthlyUpdate() {

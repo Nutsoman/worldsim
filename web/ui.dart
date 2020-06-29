@@ -1,9 +1,11 @@
 import 'dart:html';
 
+import 'combat/combat.dart';
 import 'gamestate.dart';
 import 'map/buildings.dart';
 import 'map/territory.dart';
 import 'nations/nation.dart';
+import 'units/UnitTypes.dart';
 import 'units/army.dart';
 import 'utils.dart';
 
@@ -106,11 +108,20 @@ class Provinceview extends UI {
   void update(){
     provincetitle.setInnerHtml("Hex ${location.name}");
     String ret = "Defense: ${location.totalDefenseModifier.getRounded()}<br><br>";
-    if ( !location.localArmies.isEmpty ) {
+    if ( !location.localArmies.isEmpty && location.ongoingConflicts.isEmpty ) {
       ret += "Units Present:<br>";
+      for ( Army army in location.localArmies ) {
+        ret += "${ army.owner.name }<br>";
+      }
     }
-    for ( Army army in location.localArmies ) {
-      ret += "${ army.owner.name }<br>";
+    if ( location.ongoingConflicts.isNotEmpty ){
+      ret += "Force Distribution:<br><br>";
+      for ( ConflictHex hex in location.ongoingConflicts ){
+        ret += "${hex.owner.leader.name}:<br>";
+        for ( UnitType type in hex.deployedHere.keys ){
+          ret += "${type.name}: ${hex.deployedHere[type].getRounded()}<br>";
+        }
+      }
     }
     buildingtext.setInnerHtml( ret );
     if ( location.underConstruction != null ){
