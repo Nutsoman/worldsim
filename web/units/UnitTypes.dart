@@ -3,13 +3,12 @@
 class UnitType{
   String name;
   double speed;
-  double antiarmor;
-  double antipersonnel;
+  double attack;
+  double defense;
   double cohesion;
-  double frontage;
-  int range;
+  double failchance;
 
-  UnitType( String this.name, double this.speed, double this.antiarmor, double this.antipersonnel, double this.cohesion, double this.frontage, int this.range );
+  UnitType( String this.name, double this.speed, double this.attack, double this.defense, double this.cohesion, double this.failchance );
 
 }
 
@@ -27,13 +26,13 @@ abstract class UnitTypes {
 
     //Generate Poptypes
 
-    UnitType levy = new UnitType("Screaming Maniac", 1.0, 0.5, 1, 2, 1, 2);
+    UnitType levy = new UnitType("Screaming Maniac", 1.0, 1.0, 0.05, 1, 0 );
     add(levy);
 
-    UnitType tanks = new UnitType("Dune Buggy", 2.0, 0.75, 2, 20, 2, 2);
+    UnitType tanks = new UnitType("Dune Buggy", 2.0, 4.0, 0.25, 5, 0.1 );
     add(tanks);
 
-    UnitType saucepan = new UnitType("Weird Guy with a Saucepan", 1.0, 1, 0.75, 10, 1, 1);
+    UnitType saucepan = new UnitType("Weird Guy with a Saucepan", 1.0, 10.0, 0.5, 10, 0.1 );
     add(saucepan);
 
   }

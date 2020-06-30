@@ -121,6 +121,7 @@ class Provinceview extends UI {
         for ( UnitType type in hex.deployedHere.keys ){
           ret += "${type.name}: ${hex.deployedHere[type].getRounded()}<br>";
         }
+        ret += "Cohesion: ${ hex.CurrentCohesion.getRounded() }/${ hex.MaxCohesion.getRounded() }<br><br>";
       }
     }
     buildingtext.setInnerHtml( ret );

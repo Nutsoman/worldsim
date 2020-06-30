@@ -110,7 +110,6 @@ class Gamestate {
       int id = world.locationlookup[index];
       if ( id != World.nolocation ) {
         bool redraw = false;
-        print("YES");
         Territory location = world.locations[id];
         for (Army army in selectedarmies) {
           army.moveOrder(location, keysheld.contains(16));
@@ -152,9 +151,9 @@ class Gamestate {
     for( Territory location in world.locations ){
       location.logicUpdate();
     }
-    for( Nation nation in world.nations ){
+    for( final Nation nation in world.nations ){
       nation.logicUpdate();
-      for ( Army army in nation.armies ){
+      for ( final Army army in nation.armies ){
         army.logicUpdate();
       }
     }
@@ -163,21 +162,10 @@ class Gamestate {
         ui.update();
       }
     }
-
-  }
-
-  void dailyUpdate() {
-    for( Territory location in world.locations ){
-      location.dailyUpdate();
-    }
-    for( Nation nation in world.nations ){
-      nation.dailyUpdate();
-    }
-
     Set<Skirmish> toCull = <Skirmish>{};
 
-    for ( Skirmish skirmish in world.skirmishes ){
-      bool skirmishOver = skirmish.update();
+    for ( final Skirmish skirmish in world.skirmishes ){
+      final bool skirmishOver = skirmish.update();
       if ( skirmishOver ) {
         skirmish.cull(); //garbage collection........... why
         toCull.add(skirmish);
@@ -190,13 +178,21 @@ class Gamestate {
     toCull.clear();
   }
 
+  void dailyUpdate() {
+    for( Territory location in world.locations ){
+      location.dailyUpdate();
+    }
+    for( Nation nation in world.nations ){
+      nation.dailyUpdate();
+    }
+  }
+
   void monthlyUpdate() {
     for( Territory location in world.locations ){
       location.monthlyUpdate(random);
     }
     for( Nation nation in world.nations ){
       nation.monthlyUpdate(random);
-      print(nation.name);
     }
   }
 
@@ -251,7 +247,6 @@ class Calendar {
         }
       }
     }
-    print(this);
   }
 
   static int duration({int ticks:0, int days:0, int months:0, int years:0}){
